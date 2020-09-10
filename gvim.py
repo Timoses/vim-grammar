@@ -117,7 +117,7 @@ def is_vim():
     # most often the shell
     pane_parent_pid = _session.attached_window.attached_pane.get('pane_pid')
     import subprocess
-    ps = subprocess.Popen(['ps', '-o', 'ppid,comm'], stdout=subprocess.PIPE, text=True)
+    ps = subprocess.Popen(['ps', '-a', '-o', 'ppid,comm'], stdout=subprocess.PIPE, universal_newlines=True)
     ps.wait()
     stdout, _O = ps.communicate()
     if stdout is None:
