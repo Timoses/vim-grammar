@@ -108,12 +108,31 @@ class CommandModeDisabler(CommandModeFinishRule):
         commandModeBootstrap.enable()
         normalModeGrammar.enable()
         super(self.__class__, self)._process_recognition(node, extras)
-        print "\n(NORMAL)"
+        print("\n(NORMAL)")
 
 ### 4. Prep & activate the requisite grammars
-gvim_exec_context = AppContext(executable="gvim")
-vim_putty_context = AppContext(title="vim")
-gvim_context = (gvim_exec_context | vim_putty_context)
+def is_vim():
+    _server = Server()
+    _session = _server.sessions[0]
+    # most often the shell
+    pane_parent_pid = _session.attached_window.attached_pane.get('pane_pid')
+    import subprocess
+    ps = subprocess.Popen(['ps', '-o', 'ppid,comm'], stdout=subprocess.PIPE, text=True)
+    ps.wait()
+    stdout, _O = ps.communicate()
+    if stdout is None:
+        return False
+    for row in stdout.split('\n'):
+        splits = row.strip().split(' ')
+        # Is the process running in in the parent shell
+        # of the current pane?
+        if splits[0] == pane_parent_pid:
+            if splits[1] == 'nvim':
+                return True
+terminal_context = AppContext(executable="alacritty")
+vim_context = FuncContext(is_vim)
+
+gvim_context = (terminal_context & vim_context)
 
 # a. Normal mode - on by default
 normalModeGrammar = Grammar("gvim", context=gvim_context)
