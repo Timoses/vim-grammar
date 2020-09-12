@@ -5,7 +5,7 @@
 
 from dragonfly import *
 from vim.rules import action, motion, object, navigation, buffer, quick_replace, quick_settings, diff, general
-from vim.plugins import surround, easy_motion, netrw, ctrlp, fugitive, unimpaired, snipmate
+from vim.plugins import surround, easy_motion, netrw, ctrlp, fugitive, unimpaired, snipmate, deoplete
 from vim.vim_config import get_config
 from libtmux import Server
 #try:
@@ -152,6 +152,7 @@ insertModeGrammar = Grammar("Insert Mode grammar", context=gvim_context)
 insertModeGrammar.add_rule(InsertModeCommands())
 insertModeGrammar.add_rule(InsertModeDisabler())
 insertModeGrammar.add_rule(snipmate.SnipMateRule())
+insertModeGrammar.add_rule(deoplete.DeopleteRule())
 insertModeGrammar.load()
 insertModeGrammar.disable()
 
