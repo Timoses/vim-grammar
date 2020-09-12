@@ -4,7 +4,7 @@ def verbChoice(name="verb"):
     return Choice(name, {
         "delete": "d",
         "(copy | yank)": "y",
-        "(select | visual)": "v",
+#       "select | visual)": "v",
         "case lower": "g,u",
         "case upper": "g,U",
         "format": "g,q",
